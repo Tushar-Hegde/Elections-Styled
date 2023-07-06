@@ -1,0 +1,33 @@
+
+{% load static %}
+
+<html>
+    <head>
+        <link rel = "stylesheet" href = "{% static 'baseStyle.css' %}">
+    </head>
+
+    <body>
+        <center><h1><u>{{pageName}}</u></h1></center>
+        <div class = "base">
+            <div class = "child">
+                <a href = "http://localhost:8000/ElectionCode/home/">
+                    <button>
+                        <img src = "https://cdn2.iconfinder.com/data/icons/us-election-2020/60/005-vote-ballot-box-64.png"/>
+                        
+                    </button>
+                </a>
+            </div>
+            <div class = "child">
+                <a href = "http://localhost:8000/ElectionCode/live/">
+                    <button>
+                        <img src = "https://cdn4.iconfinder.com/data/icons/essential-app-2/16/statistic-bar-chart-stat-256.png"/>
+                        
+                    </button>
+                </a>
+            </div>
+        </div>
+    </body>
+    {% block body %}
+    {% endblock %}
+</html>
+

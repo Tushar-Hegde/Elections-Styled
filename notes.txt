@@ -1,0 +1,7 @@
+Register Page:
+
+Have two forms, one directing to a 'make a survey' screen and the other directing to a survey
+The first one needs name (of the survey creator)
+When you click the button, a table in SQL should be created and accessed
+
+Use JSON to convert stuff to dictionaries

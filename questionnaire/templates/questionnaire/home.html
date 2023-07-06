@@ -1,0 +1,137 @@
+
+{% load static %}
+<html>
+    <head>
+        <title>Questionnaire</title>
+        <link rel = 'stylesheet' href = "{% static 'questionnaireStyle.css' %}"/>
+    </head>
+    <body>
+        <div id="main_container">
+            <div class = 'form_details'>
+                <h1 class = 'form_text'>  Form Name &nbsp </h1>
+                <h1 class = 'form_text'>  &nbsp Form ID </h1>  
+            </div>
+            <div class = 'form_details'>
+                <form id = 'questionForm' method = 'POST'>
+                    {% csrf_token%}
+                    {{form.name}}
+                    &nbsp &nbsp &nbsp &nbsp
+                    {{form.identity}}
+                    
+                </form>
+            </div>
+            <div id="form_container">
+                <form>
+                    <div class="form_div", id = "form_div_main">
+                        <h1>Question</h1>
+                        <input class = "qinput" type="text" name="question" />
+                    </div>
+                    <div class="q_div">
+                        <h1>Answer</h1>
+                        <input class = "qinput" type="text" name="answers" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button id="addQuestion">
+            Add Question
+        </button>
+        <button id="addAnswer">
+            Add Answer
+        </button>
+        <button id = "save">
+            Save
+        </button>
+
+        <script>
+            let container = document.querySelector("#form_container");
+            let main_container = document.querySelector("#main_container");
+            let addQuestionButton = document.querySelector('#addQuestion');
+            let addAnswerButton = document.querySelector('#addAnswer');
+            let saveButton = document.querySelector('#save');
+            let formCount = 1;
+            let ansCount = 1;
+            let dict = {}
+
+            addQuestionButton.addEventListener('click', addForm);
+            addAnswerButton.addEventListener('click', addAnswer);
+            saveButton.addEventListener('click', save)
+
+            function addForm() {
+                let formDiv = document.createElement('div');
+                formDiv.innerHTML = document.querySelector('#form_div_main').innerHTML; // # for id, . for classes
+                formDiv.classList.add('form_div');
+
+                main_container.appendChild(formDiv);
+                formCount++;
+            }
+
+            function addAnswer() {
+                let qDiv = document.createElement('div');
+                qDiv.innerHTML = document.querySelector('.q_div').innerHTML;
+                qDiv.classList.add('q_div');
+                try{
+                    let formDiv = document.querySelector('.form_div:last-child');
+                    formDiv.appendChild(qDiv);
+                }
+                catch(err){
+                    container.appendChild(qDiv);
+                }
+                
+                ansCount++;
+            }
+
+            function save(event){
+                event.preventDefault();
+            
+                let division = Array.from(document.getElementsByClassName('form_div'))
+                for (let i=0; i<division.length;i++){
+                    if(i!=0){
+                        let list = Array.from(division[i].getElementsByClassName('qinput'))
+                        nested={}
+                        for(let k=1; k<list.length; k++){
+                            nested[list[k].value]=0
+                        }
+                        dict[list[0].value]=nested
+                    }
+                    else{
+                        nested={}
+                        // get the question (there's only one)
+                        let required_div = document.getElementsByClassName('form_div')[0]
+                        let q = required_div.getElementsByClassName('qinput')[0].value
+                        // get all answer elements
+                        required_div=document.getElementById('form_container')
+                        answer_list = Array.from(required_div.getElementsByClassName('qinput'))
+                        for (let i =1; i<answer_list.length; i++){ // ignore the question itself
+                            nested[answer_list[i].value]=0
+                        }
+                        dict[q]=nested
+                    }
+                }
+
+                let questionsString = JSON.stringify(dict);
+
+                // to add the dictionary to the model, an input is required. Best you can do is keep it hidden so the user cannot see it and then assign its value
+                
+                let questionsField = document.createElement('input');
+                questionsField.setAttribute('type', 'hidden');
+                questionsField.setAttribute('name', 'questions'); // sends the data to 'questions' in the form
+                questionsField.setAttribute('value', questionsString);
+            
+                
+                let questionForm = document.getElementById('questionForm');
+                questionForm.appendChild(questionsField);
+            
+                
+                questionForm.submit();
+                
+            }
+              
+        </script>
+    </body>
+</html>
+
+<!--
+    Nothing to look at here, just some highly impressive JavaScript DOM querying
+-->

@@ -1,0 +1,26 @@
+{% extends 'ElectionCode/base.html' %}
+
+{% block body %}
+
+<div class = "container">
+    {% for key, value in requiredQuestions.items %}
+
+    <div class = 'question_display'>
+        <h2><b>{{key}}</b></h2>
+        {% for val, no in value.items %}
+        <div class = 'eachElement'>
+            <li>{{val}}</li>
+            <input type = 'checkbox'/>
+        </div>
+
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+<script>
+    
+</script>
+
+
